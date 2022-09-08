@@ -21,15 +21,15 @@ repos:
     entry: gdformat
     args: [--check]
     language: system
-    files: ^scripts/.*\.gd$
+    files: \.gd$
   - id: check-shaders
     name: check shaders 
     entry: clang-format
     args: [--style=file --dry-run -Werror]
     language: system
-    files: ^shaders/.*\.shader$
+    files: \.shader$
   - id: lint-gdscript
     name: lint gdscript
     entry: gdlint
     language: system
-    files: ^scripts/.*\.gd$  
+    files: \.gd$  
