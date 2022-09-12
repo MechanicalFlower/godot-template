@@ -8,10 +8,25 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Label3D",
+"class": "Greeter",
+"language": "GDScript",
+"path": "res://scripts/greeter.gd"
+} ]
+_global_script_class_icons={
+"Greeter": ""
+}
+
 [application]
 
-config/name="{{ project-name }}"
+config/name="Greeter"
+run/main_scene="res://scenes/main.tscn"
 config/icon="res://assets/icon.png"
+
+[autoload]
+
+DebugDraw="*res://addons/zylann.debug_draw/debug_draw.gd"
 
 [rendering]
 

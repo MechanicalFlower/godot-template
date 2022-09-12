@@ -19,17 +19,18 @@ repos:
   - id: check-gdscript
     name: check gdscript
     entry: gdformat
-    args: [--check]
     language: system
     files: \.gd$
   - id: check-shaders
-    name: check shaders 
+    name: check shaders
     entry: clang-format
-    args: [--style=file --dry-run -Werror]
+    args:
+      - --style=file
+      - -Werror
     language: system
     files: \.shader$
   - id: lint-gdscript
     name: lint gdscript
     entry: gdlint
     language: system
-    files: \.gd$  
+    files: \.gd$

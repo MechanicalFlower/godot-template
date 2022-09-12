@@ -7,7 +7,7 @@ on:
 
 env:
   GODOT_VERSION: 3.5
-  EXPORT_NAME: Slippery
+  EXPORT_NAME: Greeter
   ITCH_IO: ${{ false }} # Set to true if you want to enable automatic itch.io deploy
   RELEASE_ANDROID: ${{ false }} # Set to  true if you want to enable automatic android release export
 
