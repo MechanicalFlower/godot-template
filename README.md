@@ -13,9 +13,9 @@ A template to create new [Godot Engine](https://godotengine.org/) project.
 ## Features
 
 - Clean separation of assets, resources, scenes, scripts and shaders code
-<!-- - Integrated test suite -->
 - Continuous integration via [GitHub Actions](https://help.github.com/en/actions/)
 - Code formatting enforced by [gdformat](https://github.com/Scony/godot-gdscript-toolkit) for gdscript code, and [clang-format](https://clang.llvm.org/docs/ClangFormat.html) for shaders, via [pre-commit](https://github.com/pre-commit/pre-commit)
+<!-- - Integrated test suite -->
 
 ## Usage
 
