@@ -28,3 +28,9 @@ A template to create new [Godot Engine](https://godotengine.org/) project.
 
 Eventually, you can remove any unused files, such as irrelevant github workflows for your project.
 Feel free to replace the License with one suited for your project.
+
+## Contributing
+
+We welcome community contributions to this project.
+
+Please read our [Contributor Guide](CONTRIBUTING.md) for more information on how to get started.
