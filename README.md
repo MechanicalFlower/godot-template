@@ -3,7 +3,7 @@
 
 # 📝 Greeter
 
-![Godot Badge](https://img.shields.io/badge/godot-3.5-blue?logo=Godot-Engine&logoColor=white) ![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white) ![license](https://img.shields.io/badge/license-MIT-green?logo=open-source-initiative&logoColor=white)
+![Godot Badge](https://img.shields.io/badge/godot-4.0-blue?logo=Godot-Engine&logoColor=white) ![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white) ![license](https://img.shields.io/badge/license-MIT-green?logo=open-source-initiative&logoColor=white)
 
 A template to create new [Godot Engine](https://godotengine.org/) project.
 

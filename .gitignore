@@ -1,6 +1,8 @@
 # Godot-specific ignores
 .import/
+.godot/
 export.cfg
+*.gfxr
 
 # Imported translations (automatically generated from CSV files)
 *.translation

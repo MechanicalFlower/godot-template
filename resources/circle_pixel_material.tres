@@ -1,8 +1,8 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cdco3232rqf0y"]
 
-[ext_resource path="res://shaders/circle_pixel.shader" type="Shader" id=1]
+[ext_resource type="Shader" path="res://shaders/circle_pixel.gdshader" id="1_v1eqq"]
 
 [resource]
-shader = ExtResource( 1 )
-shader_param/amount_x = 50.0
-shader_param/amount_y = 50.0
+shader = ExtResource("1_v1eqq")
+shader_parameter/amount_x = 64.0
+shader_parameter/amount_y = 64.0

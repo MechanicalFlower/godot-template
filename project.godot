@@ -6,27 +6,22 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Label3D",
-"class": "Greeter",
-"language": "GDScript",
-"path": "res://scripts/greeter.gd"
-} ]
-_global_script_class_icons={
-"Greeter": ""
-}
+config_version=5
 
 [application]
 
 config/name="Greeter"
 run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.0")
 config/icon="res://assets/icon.png"
 
 [autoload]
 
-DebugDraw="*res://addons/zylann.debug_draw/debug_draw.gd"
+FPSGraphOverlay="*res://addons/fps_graph_overlay/FPSGraphOverlay.tscn"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/fps_graph_overlay/plugin.cfg")
 
 [rendering]
 

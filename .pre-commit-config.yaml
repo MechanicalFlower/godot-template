@@ -14,6 +14,10 @@ repos:
   - id: end-of-file-fixer       # Checks for ending with a newline
   - id: mixed-line-ending       # Consistent LF or CRLF
   - id: trailing-whitespace     # No trailing whitespace
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.2.4
+  hooks:
+  - id: codespell
 - repo: local
   hooks:
   - id: check-gdscript
@@ -21,6 +25,7 @@ repos:
     entry: gdformat
     language: system
     files: \.gd$
+    exclude: ^addons/
   - id: check-shaders
     name: check shaders
     entry: clang-format
@@ -29,8 +34,10 @@ repos:
       - -Werror
     language: system
     files: \.shader$
+    exclude: ^addons/
   - id: lint-gdscript
     name: lint gdscript
     entry: gdlint
     language: system
     files: \.gd$
+    exclude: ^addons/
