@@ -26,7 +26,11 @@ config/icon="res://assets/icon.png"
 
 [autoload]
 
-DebugDraw="*res://addons/zylann.debug_draw/debug_draw.gd"
+FPSGraphOverlay="*res://addons/fps_graph_overlay/FPSGraphOverlay.tscn"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/fps_graph_overlay/plugin.cfg" )
 
 [rendering]
 
