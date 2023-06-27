@@ -1,0 +1,38 @@
+name: Export Godot game
+description: Export Godot game.
+inputs:
+  platform:
+    description: The game platform.
+    required: true
+  output:
+    description: The game output.
+    required: true
+  version:
+    description: The game version.
+    required: true
+  godot_version:
+    description: The Godot version.
+    required: true
+  preset:
+    description: The export preset.
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Add Build Info
+      uses: robpc/godot-build-info-action@v1
+      with:
+        version: ${{ inputs.version }}
+
+    - name: Setup Godot Templates
+      shell: bash
+      run: |
+        mkdir -v -p ~/.local/share/godot/templates
+        mv /root/.local/share/godot/templates/${{ inputs.godot_version }}.stable ~/.local/share/godot/templates/${{ inputs.godot_version }}.stable
+
+    - name: Build ${{ inputs.preset }}
+      shell: bash
+      run: |
+        [ -d build ] && rm -r build
+        mkdir -v -p build/${{ matrix.platform }}
+        godot --export "${{ inputs.preset }}" --headless ./build/${{ matrix.platform }}/${{ inputs.output }}
