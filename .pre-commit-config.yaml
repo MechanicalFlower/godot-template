@@ -2,7 +2,6 @@ repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.3.0
   hooks:
-  - id: check-added-large-files # Prevent giant files from being committed
   - id: fix-byte-order-marker   # Prevents weird UTF-8 encoding edge cases
   - id: check-case-conflict     # Check if case-insensitive filesystems would bork
   - id: check-docstring-first   # Check for if docstring was misplaced
@@ -14,6 +13,10 @@ repos:
   - id: end-of-file-fixer       # Checks for ending with a newline
   - id: mixed-line-ending       # Consistent LF or CRLF
   - id: trailing-whitespace     # No trailing whitespace
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.2.4
+  hooks:
+  - id: codespell
 - repo: local
   hooks:
   - id: check-gdscript
@@ -21,6 +24,7 @@ repos:
     entry: gdformat
     language: system
     files: \.gd$
+    exclude: ^addons/
   - id: check-shaders
     name: check shaders
     entry: clang-format
@@ -29,8 +33,10 @@ repos:
       - -Werror
     language: system
     files: \.shader$
+    exclude: ^addons/
   - id: lint-gdscript
     name: lint gdscript
     entry: gdlint
     language: system
     files: \.gd$
+    exclude: ^addons/
