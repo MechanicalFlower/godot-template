@@ -6,13 +6,12 @@ name: Release Packaging
 
 on:
   push:
-    branches: [main]
+    branches: ['3.5']
   workflow_dispatch:
 
 env:
   version: 0.1.0
   godot_version: 3.5
-  export_name: Greeter
 
 jobs:
   release-packaging:
@@ -25,11 +24,11 @@ jobs:
       matrix:
         include:
           - platform: windows
-            output: ${{ env.export_name }}.exe
+            output: Greeter.exe
             preset: Windows Desktop
 
           - platform: linux
-            output: ${{ env.export_name }}.x86_64
+            output: Greeter.x86_64
             preset: Linux/X11
 
           - platform: web
@@ -37,14 +36,14 @@ jobs:
             preset: HTML5
 
           - platform: mac
-            output: ${{ env.export_name }}.zip
+            output: Greeter.zip
             preset: Mac OSX
 
     name: ${{ matrix.preset }} Export
     steps:
       - uses: actions/checkout@v3
 
-      - name: Export ${{ env.export_name }}
+      - name: Export Greeter
         uses: ./.github/actions/export-game
         with:
           platform: ${{ matrix.platform }}
@@ -56,7 +55,7 @@ jobs:
       - name: Upload artifact
         uses: ./.github/actions/upload-artifact
         with:
-          name: ${{ env.export_name }}-${{ matrix.platform }}-v${{ env.version }}
+          name: Greeter-${{ matrix.platform }}-v${{ env.version }}
           path: build/${{ matrix.platform }}
 
       # Installing rsync is needed in order to deploy to GitHub Pages. Without it, the build will fail.
