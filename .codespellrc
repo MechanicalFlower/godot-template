@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Florian Vazelle <florian.vazelle@vivaldi.net>
+#
+# SPDX-License-Identifier: MIT
+
 [codespell]
 skip = assets/**,addons/**
 ignore-words-list = lod,LOD

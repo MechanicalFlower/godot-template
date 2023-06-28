@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Florian Vazelle <florian.vazelle@vivaldi.net>
+#
+# SPDX-License-Identifier: MIT
+
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
 

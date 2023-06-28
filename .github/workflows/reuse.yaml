@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2023 Florian Vazelle <florian.vazelle@vivaldi.net>
+#
+# SPDX-License-Identifier: MIT
+
+name: REUSE Compliance Check
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  reuse-compliance-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: fsfe/reuse-action@v1.2.0

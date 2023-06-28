@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 Florian Vazelle <florian.vazelle@vivaldi.net>
+
+SPDX-License-Identifier: MIT
+-->
+
 # Contributing
 
 We welcome contributions to our open source Godot game project! There are many ways you can help, including reporting bugs, improving documentation, and contributing code.

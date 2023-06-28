@@ -1,3 +1,9 @@
+; SPDX-FileCopyrightText: 2023 Sander Vanhove <sandervhove@gmail.com>
+;
+; SPDX-License-Identifier: MIT
+;
+; Source: https://github.com/SanderVanhove/godot-fps-graph-overlay
+
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/fps_graph_overlay/FPSGraphOverlay.gd" type="Script" id=1]

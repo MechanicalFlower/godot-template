@@ -1,3 +1,9 @@
+// SPDX-FileCopyrightText: 2023 jijiji
+//
+// SPDX-License-Identifier: CC0-1.0
+//
+// Source: https://godotshaders.com/shader/circle-pixel/
+
 shader_type canvas_item;
 
 uniform float amount_x: hint_range(0, 128) = 8;

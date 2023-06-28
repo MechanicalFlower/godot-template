@@ -1,0 +1,10 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Greeter
+Upstream-Contact: Florian Vazelle <florian.vazelle@vivaldi.net>
+Source: https://github.com/MechanicalFlower/godot-template
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...

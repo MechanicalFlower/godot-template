@@ -1,3 +1,7 @@
+; SPDX-FileCopyrightText: 2023 Florian Vazelle <florian.vazelle@vivaldi.net>
+;
+; SPDX-License-Identifier: MIT
+
 [gd_resource type="ShaderMaterial" load_steps=2 format=2]
 
 [ext_resource path="res://shaders/circle_pixel.shader" type="Shader" id=1]

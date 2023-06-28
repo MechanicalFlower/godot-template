@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2023 Sander Vanhove <sandervhove@gmail.com>
+#
+# SPDX-License-Identifier: MIT
+#
+# Source: https://github.com/SanderVanhove/godot-fps-graph-overlay
+
 extends CanvasLayer
 
 export(float) var point_interval_seconds: float = 1
