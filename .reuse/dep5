@@ -1,0 +1,30 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Greeter
+Upstream-Contact: Florian Vazelle <florian.vazelle@vivaldi.net>
+Source: https://github.com/MechanicalFlower/game-template
+
+Files: *
+Copyright: 2023 Florian Vazelle
+License: MIT
+
+# Addons
+
+Files: addons/gd-plug/*
+Copyright: 2021 Tan Jian Ping
+License: MIT
+Source: https://github.com/imjp94/gd-plug
+
+Files: addons/debug_menu/*
+Copyright: 2023-present Hugo Locurcio and contributors
+License: MIT
+Source: https://github.com/godot-extended-libraries/godot-debug-menu
+
+Files: addons/UniversalFade/*
+Copyright: 2019 Tomek
+License: MIT
+Source: https://github.com/KoBeWi/Godot-Universal-Fade
+
+Files: addons/EasyMenus/*
+Copyright: 2022 Savo Vuksan
+License: MIT
+Source: https://github.com/SavoVuksan/EasyMenus

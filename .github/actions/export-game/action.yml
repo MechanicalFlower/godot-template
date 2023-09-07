@@ -1,6 +1,9 @@
 name: Export Godot game
 description: Export Godot game.
 inputs:
+  platform:
+    description: The game platform.
+    required: true
   output:
     description: The game output.
     required: true
@@ -21,13 +24,26 @@ runs:
       with:
         version: ${{ inputs.version }}
 
-    - name: Setup Godot Templates
+    - name: Setup Godot
+      uses: chickensoft-games/setup-godot@v1
+      with:
+        version: ${{ inputs.godot_version }}
+        use-dotnet: false
+
+    - name: Install Addons
+      shell: bash
       run: |
-        mkdir -v -p ~/.local/share/godot/templates
-        mv /root/.local/share/godot/templates/${{ inputs.godot_version }}.stable ~/.local/share/godot/templates/${{ inputs.godot_version }}.stable
+        [ -f plug.gd ] && godot --headless -s plug.gd install || true
+
+    # workaround: https://github.com/godotengine/godot/pull/68461
+    - name: Import Assets
+      shell: bash
+      run: |
+        timeout 60 godot --editor --headless || true
 
     - name: Build ${{ inputs.preset }}
+      shell: bash
       run: |
         [ -d build ] && rm -r build
-        mkdir -v -p build/
-        godot -v --export "${{ inputs.preset }}" ./build/${{ inputs.output }}
+        mkdir -v -p build/${{ inputs.platform }}
+        timeout 60 godot --export-release "${{ inputs.preset }}" --headless ./build/${{ inputs.platform }}/${{ inputs.output }} || true

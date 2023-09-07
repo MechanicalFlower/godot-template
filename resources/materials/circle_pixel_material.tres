@@ -4,5 +4,5 @@
 
 [resource]
 shader = ExtResource("1_v1eqq")
-shader_parameter/amount_x = 64.0
-shader_parameter/amount_y = 64.0
+shader_parameter/amount_x = 128.0
+shader_parameter/amount_y = 128.0

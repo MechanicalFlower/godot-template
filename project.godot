@@ -11,18 +11,28 @@ config_version=5
 [application]
 
 config/name="Greeter"
-run/main_scene="res://scenes/main.tscn"
-config/features=PackedStringArray("4.0")
+run/main_scene="res://scenes/menu.tscn"
+config/features=PackedStringArray("4.1")
 config/icon="res://assets/icon.png"
+
+[audio]
+
+buses/default_bus_layout="res://resources/default_bus_layout.tres"
 
 [autoload]
 
-FPSGraphOverlay="*res://addons/fps_graph_overlay/FPSGraphOverlay.tscn"
+GlobalSignal="*res://scripts/framework/global_signal.gd"
+DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
+MenuTemplateManager="*res://addons/EasyMenus/Nodes/menu_template_manager.tscn"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/fps_graph_overlay/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [rendering]
 
-environment/default_environment="res://default_env.tres"
+environment/default_environment="res://resources/default_env.tres"

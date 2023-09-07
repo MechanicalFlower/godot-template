@@ -37,7 +37,7 @@ To ensure that your code passes the CI checks, you should run the following pre-
 You can set up pre-commit hooks to automatically run these checks before you commit your changes. To do this, you will need to install the following tools:
 
 - The `pre-commit` Python package: This package contains a set of tools for running checks on your code before committing it. You can install it using `pip install pre-commit`.
-- The `godot-gdscript-toolkit`: This toolkit contains a set of tools for formatting and linting GDScript code. You can install it using `pip install 'gdtoolkit==3.*'`.
+- The `godot-gdscript-toolkit`: This toolkit contains a set of tools for formatting and linting GDScript code. You can install it using `pip install 'gdtoolkit==4.*'`.
 
 Then, run `pre-commit install` to set up the hooks.
 

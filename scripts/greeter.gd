@@ -8,4 +8,7 @@ extends Label3D
 
 
 func _ready() -> void:
+	await get_tree().process_frame
+	await Fade.fade_in(1, Color.BLACK, "Diamond", false, false).finished
+
 	set_text("Hello " + player_name + "!")

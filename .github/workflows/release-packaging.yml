@@ -2,24 +2,19 @@ name: Release Packaging
 
 on:
   push:
-    branches:
-      - main
-      - 4.x
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   release-packaging:
     runs-on: ubuntu-20.04
-    container:
-      image: barichello/godot-ci:4.0
+    timeout-minutes: 30
 
-    name: ${{ matrix.preset }} Export
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: Windows Export
-            platform: windows
+          - platform: windows
             output: Greeter.exe
             preset: Windows Desktop
 
@@ -31,25 +26,33 @@ jobs:
             output: index.html
             preset: Web
 
-          # - platform: mac
-          #   output: Greeter.zip
-          #   preset: Mac OSX
+          - platform: mac
+            output: Greeter.zip
+            preset: macOS
 
+    name: ${{ matrix.preset }} Export
     steps:
       - uses: actions/checkout@v3
 
-      - name: Export Cursed Street
+      - name: Setup Versions Vars
+        run: |
+          echo "game_version=$(cat .version)" >> $GITHUB_ENV
+          echo "godot_version=$(cat .godot_version)" >> $GITHUB_ENV
+          ./bump_version.sh
+
+      - name: Export Greeter
         uses: ./.github/actions/export-game
         with:
-          output: ${{ matrix.platform }}/${{ matrix.output }}
-          version: 0.1.0
-          godot_version: 4.0
+          platform: ${{ matrix.platform }}
+          output: ${{ matrix.output }}
           preset: ${{ matrix.preset }}
+          version: ${{ env.game_version }}
+          godot_version: ${{ env.godot_version }}
 
       - name: Upload artifact
         uses: ./.github/actions/upload-artifact
         with:
-          name: CursedStreet-${{ matrix.platform }}-v${{ env.version }}
+          name: Greeter-${{ matrix.platform }}-v${{ env.game_version }}
           path: build/${{ matrix.platform }}
 
       # Installing rsync is needed in order to deploy to GitHub Pages. Without it, the build will fail.

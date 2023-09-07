@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://jw34guuhfr2h"]
+
+[ext_resource type="PackedScene" uid="uid://dq6tvhqcy2aps" path="res://addons/EasyMenus/Scenes/main_menu.tscn" id="1_hg7xw"]
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_lk1h2"]
+
+[node name="Menu" type="Node"]
+script = ExtResource("1_lk1h2")
+
+[node name="EasyMenu" parent="." instance=ExtResource("1_hg7xw")]
+unique_name_in_owner = true

@@ -3,18 +3,18 @@
 
 # 📝 Greeter
 
-![Godot Badge](https://img.shields.io/badge/godot-4.0-blue?logo=Godot-Engine&logoColor=white) ![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white) ![license](https://img.shields.io/badge/license-MIT-green?logo=open-source-initiative&logoColor=white)
+![Godot Badge](https://img.shields.io/badge/godot-4.0-blue?logo=Godot-Engine&logoColor=white) ![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white) ![license](https://img.shields.io/badge/license-MIT-green?logo=open-source-initiative&logoColor=white) ![reuse](./.reuse/REUSE-compliant.svg)
 
 A template to create new [Godot Engine](https://godotengine.org/) project.
 
 </div>
-
 
 ## Features
 
 - Clean separation of assets, resources, scenes, scripts and shaders code
 - Continuous integration via [GitHub Actions](https://help.github.com/en/actions/)
 - Code formatting enforced by [gdformat](https://github.com/Scony/godot-gdscript-toolkit) for gdscript code, and [clang-format](https://clang.llvm.org/docs/ClangFormat.html) for shaders, via [pre-commit](https://github.com/pre-commit/pre-commit)
+- Keep track of licenses and attribution by following the [reuse specification](https://reuse.software/spec/)
 <!-- - Integrated test suite -->
 
 ## Usage
