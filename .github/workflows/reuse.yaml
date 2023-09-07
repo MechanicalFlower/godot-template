@@ -9,5 +9,5 @@ jobs:
   reuse-compliance-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: fsfe/reuse-action@v2.0.0
