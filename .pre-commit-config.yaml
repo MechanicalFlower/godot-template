@@ -82,8 +82,9 @@ repos:
     name: check shaders
     entry: clang-format
     args:
-      - --style=file
+      - --style=llvm
       - -Werror
+      - -i
     language: system
     files: \.gdshader$
     exclude: ^addons/
