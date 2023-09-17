@@ -1,20 +1,19 @@
 
-name: Upload artifact
-description: Upload artifact.
+name: Download artifact
+description: Download artifact.
 inputs:
   name:
     description: The artifact name.
     default: "${{ github.job }}"
   path:
-    description: The path to upload.
+    description: The path to download.
     required: true
-    default: "build/*"
+    default: "dist/*"
 runs:
   using: "composite"
   steps:
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.name }}
         path: ${{ inputs.path }}
-        retention-days: 1

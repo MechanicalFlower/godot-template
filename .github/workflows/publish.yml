@@ -1,0 +1,71 @@
+name: Publish
+
+# Only trigger, when the build workflow succeeded
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types: [completed]
+    tags: ['[0-9]+.[0-9]+.[0-9]+']
+
+jobs:
+  create_release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-22.04
+
+    name: Create Release
+    steps:
+      - name: Create Draft release
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="v$GITHUB_REF_NAME" \
+              --draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    needs: create_release
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            preset: Windows Desktop
+
+          - platform: linux
+            preset: Linux/X11
+
+          # - platform: web
+          #   preset: Web
+
+          - platform: mac
+            preset: macOS
+
+    name: ${{ matrix.preset }} Publish
+    steps:
+      - name: Download artifact
+        uses: ./.github/actions/upload-artifact
+        with:
+          name: Greeter-${{ matrix.platform }}-v$GITHUB_REF_NAME
+          path: dist/${{ matrix.platform }}
+
+      - name: Upload to release
+        run: |
+          gh release upload "$GITHUB_REF_NAME" \
+              --repo="$GITHUB_REPOSITORY" \
+              --clobber \
+              dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v$GITHUB_REF_NAME.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to itch.io
+        uses: josephbmanley/butler-publish-itchio-action@v1.0.3
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
+          CHANNEL: ${{ matrix.platform }}-v$GITHUB_REF_NAME
+          ITCH_GAME: greeter
+          ITCH_USER: mechanical-flower
+          PACKAGE: dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v$GITHUB_REF_NAME.zip
+          VERSION: $GITHUB_REF_NAME
