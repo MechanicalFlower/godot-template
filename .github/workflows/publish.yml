@@ -6,7 +6,10 @@ on:
     workflows: ["Build"]
     types: [completed]
     push:
-      tags: ['*']
+      tags: ['[0-9]+.[0-9]+.[0-9]+']
+
+env:
+  tag_name: ${GITHUB_REF##*/}
 
 jobs:
   create_release:
@@ -17,9 +20,9 @@ jobs:
     steps:
       - name: Create Draft release
         run: |
-          gh release create "$GITHUB_REF_NAME" \
+          gh release create "${{ env.tag_name }}" \
               --repo="$GITHUB_REPOSITORY" \
-              --title="v$GITHUB_REF_NAME" \
+              --title="v${{ env.tag_name }}" \
               --draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,18 +49,18 @@ jobs:
 
     name: ${{ matrix.preset }} Publish
     steps:
-      - name: Download artifact
-        uses: ./.github/actions/upload-artifact
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
         with:
-          name: Greeter-${{ matrix.platform }}-v$GITHUB_REF_NAME
+          name: Greeter-${{ matrix.platform }}-v${{ env.tag_name }}
           path: dist/${{ matrix.platform }}
 
       - name: Upload to release
         run: |
-          gh release upload "$GITHUB_REF_NAME" \
-              --repo="$GITHUB_REPOSITORY" \
-              --clobber \
-              dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v$GITHUB_REF_NAME.zip
+          gh release upload "${{ env.tag_name }}" \
+            --repo="$GITHUB_REPOSITORY" \
+            --clobber \
+            dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v${{ env.tag_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -65,8 +68,8 @@ jobs:
         uses: josephbmanley/butler-publish-itchio-action@v1.0.3
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
-          CHANNEL: ${{ matrix.platform }}-v$GITHUB_REF_NAME
+          CHANNEL: ${{ matrix.platform }}-v${{ env.tag_name }}
           ITCH_GAME: greeter
           ITCH_USER: mechanical-flower
-          PACKAGE: dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v$GITHUB_REF_NAME.zip
-          VERSION: $GITHUB_REF_NAME
+          PACKAGE: dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v${{ env.tag_name }}.zip
+          VERSION: ${{ env.tag_name }}

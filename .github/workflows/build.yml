@@ -6,6 +6,9 @@ on:
     tags: ['*']
   workflow_dispatch:
 
+env:
+  tag_name: ${GITHUB_REF##*/}
+
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -44,9 +47,9 @@ jobs:
           bump_version --version-file .version --cfg-file export_presets.cfg
 
       - name: Ensure version is equal to tag
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
-          [ "${{ env.game_version }}" == "$GITHUB_REF_NAME" ] || exit 2
+          [ "${{ env.game_version }}" == "${{ env.tag_name }}" ] || exit 2
 
       - name: Export Greeter
         uses: ./.github/actions/export-game
