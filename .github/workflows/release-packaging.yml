@@ -34,11 +34,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
       - name: Setup Versions Vars
         run: |
           echo "game_version=$(cat .version)" >> $GITHUB_ENV
           echo "godot_version=$(cat .godot_version)" >> $GITHUB_ENV
-          ./bump_version.sh
+          pip install git+https://github.com/MechanicalFlower/backpack.git
+          bump_version --version-file .version --cfg-file export_presets.cfg
 
       - name: Export Greeter
         uses: ./.github/actions/export-game

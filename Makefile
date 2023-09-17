@@ -28,12 +28,9 @@ mkflower:
 	touch .mkflower/.gdignore
 
 install_godot: mkflower
-	# curl -X GET "https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/SHA512-SUMS.txt" --output .mkflower/cache/SHA512-SUMS.txt
-	# if [ ! -f ".mkflower/cache/${GODOT_FILENAME}" ] || [ "$(cat .mkflower/cache/SHA512-SUMS.txt | grep ${GODOT_FILENAME} | awk -F'[[:space:]]+' '{print $1}')" != "$(sha256sum .mkflower/cache/${GODOT_FILENAME})" ]; then \
 	curl -X GET "https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}${SUBDIR}/${GODOT_FILENAME}.zip" --output .mkflower/cache/${GODOT_FILENAME}.zip; \
 	unzip .mkflower/cache/${GODOT_FILENAME}.zip -d .mkflower/cache/; \
 	cp .mkflower/cache/${GODOT_FILENAME} .mkflower/bin/${GODOT_FILENAME};
-	# fi
 
 install_templates: mkflower
 	curl -X GET "https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}${SUBDIR}/${GODOT_TEMPLATE}" --output .mkflower/cache/${GODOT_TEMPLATE}; \
