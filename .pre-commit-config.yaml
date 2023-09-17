@@ -21,9 +21,6 @@ repos:
   rev: v2.2.5
   hooks:
   - id: codespell
-    args: ["--toml", "pyproject.toml"]
-    additional_dependencies:
-    - tomli
 - repo: local
   hooks:
   - id: lower-case-only
