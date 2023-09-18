@@ -9,7 +9,7 @@ on:
       tags: ['[0-9]+.[0-9]+.[0-9]+']
 
 env:
-  tag_name: ${GITHUB_REF##*/}
+  tag_name: ${{ github.event.workflow_run.head_branch }}
 
 jobs:
   create_release:
