@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  tag_name: ${GITHUB_REF##*/}
+  tag_name: ${{ github.ref_name }}
 
 jobs:
   build:
@@ -34,15 +34,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Versions Vars
+        run: |
+          echo "game_version=$(cat .version)" >> $GITHUB_ENV
+          echo "godot_version=$(cat .godot_version)" >> $GITHUB_ENV
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Setup Versions Vars
+      - name: Bump Version
         run: |
-          echo "game_version=$(cat .version)" >> $GITHUB_ENV
-          echo "godot_version=$(cat .godot_version)" >> $GITHUB_ENV
           pip install git+https://github.com/MechanicalFlower/backpack.git
           bump_version --version-file .version --cfg-file export_presets.cfg
 
@@ -77,5 +80,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages # The branch the action should deploy to.
-          folder: build/web # The folder the action should deploy.
+          branch: gh-pages
+          folder: build/web

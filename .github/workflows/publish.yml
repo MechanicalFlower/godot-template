@@ -5,8 +5,6 @@ on:
   workflow_run:
     workflows: ["Build"]
     types: [completed]
-    push:
-      tags: ['[0-9]+.[0-9]+.[0-9]+']
 
 env:
   tag_name: ${{ github.event.workflow_run.head_branch }}
@@ -18,10 +16,16 @@ jobs:
 
     name: Create Release
     steps:
+      - name: Check Tag
+        run: |
+          if [[ ! ${{ env.tag_name }} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            exit 1
+          fi
+
       - name: Create Draft release
         run: |
           gh release create "${{ env.tag_name }}" \
-              --repo="$GITHUB_REPOSITORY" \
+              --repo="${{ github.repository }}" \
               --title="v${{ env.tag_name }}" \
               --draft
         env:
@@ -60,7 +64,7 @@ jobs:
       - name: Upload to release
         run: |
           gh release upload "${{ env.tag_name }}" \
-            --repo="$GITHUB_REPOSITORY" \
+            --repo="${{ github.repository }}" \
             --clobber \
             dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v${{ env.tag_name }}.zip
         env:
