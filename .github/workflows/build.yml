@@ -46,7 +46,7 @@ jobs:
 
       - name: Bump Version
         run: |
-          pip install git+https://github.com/MechanicalFlower/backpack.git
+          pip install magic-combo==0.1.1
           bump_version --version-file .version --cfg-file export_presets.cfg
 
       - name: Ensure version is equal to tag
