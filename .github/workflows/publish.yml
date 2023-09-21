@@ -74,7 +74,7 @@ jobs:
         uses: josephbmanley/butler-publish-itchio-action@v1.0.3
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
-          CHANNEL: ${{ matrix.platform }}-v${{ env.tag_name }}
+          CHANNEL: ${{ matrix.platform }}
           ITCH_GAME: greeter
           ITCH_USER: mechanical-flower
           PACKAGE: dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v${{ env.tag_name }}.zip
