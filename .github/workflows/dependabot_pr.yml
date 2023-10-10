@@ -1,0 +1,30 @@
+name: Dependabot PR actions
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Update the changelog
+        uses: dangoslen/dependabot-changelog-helper@v3
+        with:
+          version: 'Unreleased'
+
+      - name: Commit the changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(changelog): automatic update to add dependabot deps bump"
+          branch: ${{ github.head_ref }}
+          commit_user_name: dependabot[bot]
+          commit_user_email: support@github.com

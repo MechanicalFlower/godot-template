@@ -35,6 +35,7 @@ repos:
           public/|
           Makefile|
           CONTRIBUTING.md|
+          CHANGELOG.md|
           CREDITS.md|
           LICENSE.md|
           README.md
