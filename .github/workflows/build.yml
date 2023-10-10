@@ -46,8 +46,8 @@ jobs:
 
       - name: Bump Version
         run: |
-          pip install magic-combo==0.1.1
-          bump_version --version-file .version --cfg-file export_presets.cfg
+          pip install magic-combo==0.2.*
+          magic_combo bump_version --version-file .version --cfg-file export_presets.cfg
 
       - name: Ensure version is equal to tag
         if: startsWith(github.ref, 'refs/tags/')

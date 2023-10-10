@@ -1,0 +1,4 @@
+godot:
+  version_file: .godot_version
+game:
+  version_gile: .version
