@@ -20,9 +20,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           scopes: |
-            playbook
+            addons
+            assets
             scripts
-            tasks
+            scenes
             dependabot
             workflows
             readme
