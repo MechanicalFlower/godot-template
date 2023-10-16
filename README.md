@@ -34,6 +34,8 @@ Feel free to replace the License with one suited for your project.
 
 ## Contributing
 
+![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg) 
+
 We welcome community contributions to this project.
 
 Please read our [Contributor Guide](CONTRIBUTING.md) for more information on how to get started.
