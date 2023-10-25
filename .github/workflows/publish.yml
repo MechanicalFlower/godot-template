@@ -7,10 +7,10 @@ on:
     types: [completed]
 
 env:
-  tag_name: ${{ github.event.workflow_run.head_branch }}
+  BRANCH_NAME: ${{ github.event.workflow_run.head_branch }}
 
 jobs:
-  create_release:
+  set_tag_name:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-22.04
 
@@ -18,22 +18,32 @@ jobs:
     steps:
       - name: Check Tag
         run: |
-          if [[ ! ${{ env.tag_name }} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            exit 1
+          if [[ ${{ env.BRANCH_NAME }} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "tag_name=${{ env.BRANCH_NAME }}" >> "$GITHUB_ENV"
+          else
+            echo "tag_name=null" >> "$GITHUB_ENV"
           fi
 
-      - name: Create Draft release
+  create_release:
+    needs: set_tag_name
+
+    if: ${{ env.tag_name != 'null' }}
+    runs-on: ubuntu-22.04
+
+    name: Create Release
+    steps:
+      - name: Create release
         run: |
           gh release create "${{ env.tag_name }}" \
               --repo="${{ github.repository }}" \
               --title="v${{ env.tag_name }}" \
-              --draft
+              --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish:
     needs: create_release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
