@@ -1,7 +1,6 @@
 name: REUSE Compliance Check
 
 on:
-  pull_request:
   push:
   workflow_dispatch:
 
