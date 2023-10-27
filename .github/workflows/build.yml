@@ -34,11 +34,11 @@ jobs:
 
       - uses: MechanicalFlower/magic_combo@main
         with:
-          command: script.add-config-to-github-env
+          command: 'mcx -f .combo.yaml script.add-config-to-github-env'
 
       - uses: MechanicalFlower/magic_combo@main
         with:
-          command: script.bump-version
+          command: 'mcx -f .combo.yaml script.bump-version'
 
       - name: Ensure version is equal to tag
         if: startsWith(github.ref, 'refs/tags/')

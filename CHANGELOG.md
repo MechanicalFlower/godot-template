@@ -4,6 +4,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 ### Added
 ### Changed
+- Simplify CI/CD  ([#6](https:/github.com/MechanicalFlower/godot-template/pull/6))
 ### Deprecated
 ### Removed
 ### Fixed
