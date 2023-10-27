@@ -7,33 +7,44 @@ on:
     types: [completed]
 
 env:
-  tag_name: ${{ github.event.workflow_run.head_branch }}
+  BRANCH_NAME: ${{ github.event.workflow_run.head_branch }}
 
 jobs:
-  create_release:
+  set_tag_name:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-22.04
+
+    outputs:
+      tag_name: ${{ steps.tag.outputs.tag_name }}
+    steps:
+      - name: Check Tag
+        id: tag
+        run: |
+          if [[ ${{ env.BRANCH_NAME }} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "tag_name=${{ env.BRANCH_NAME }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag_name=null" >> "$GITHUB_OUTPUT"
+          fi
+
+  create_release:
+    needs: set_tag_name
+    if: ${{ needs.set_tag_name.outputs.tag_name != 'null' }}
     runs-on: ubuntu-22.04
 
     name: Create Release
     steps:
-      - name: Check Tag
+      - name: Create release
         run: |
-          if [[ ! ${{ env.tag_name }} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            exit 1
-          fi
-
-      - name: Create Draft release
-        run: |
-          gh release create "${{ env.tag_name }}" \
+          gh release create "${{ env.BRANCH_NAME }}" \
               --repo="${{ github.repository }}" \
-              --title="v${{ env.tag_name }}" \
-              --draft
+              --title="v${{ env.BRANCH_NAME }}" \
+              --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish:
     needs: create_release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
@@ -57,16 +68,16 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
-          name: Greeter-${{ matrix.platform }}-v${{ env.tag_name }}
+          name: Greeter-${{ matrix.platform }}-v${{ env.BRANCH_NAME }}
           path: dist/${{ matrix.platform }}
           skip_unpack: true
 
       - name: Upload to release
         run: |
-          gh release upload "${{ env.tag_name }}" \
+          gh release upload "${{ env.BRANCH_NAME }}" \
             --repo="${{ github.repository }}" \
             --clobber \
-            dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v${{ env.tag_name }}.zip
+            dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v${{ env.BRANCH_NAME }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -77,5 +88,5 @@ jobs:
           CHANNEL: ${{ matrix.platform }}
           ITCH_GAME: greeter
           ITCH_USER: mechanical-flower
-          PACKAGE: dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v${{ env.tag_name }}.zip
-          VERSION: ${{ env.tag_name }}
+          PACKAGE: dist/${{ matrix.platform }}/Greeter-${{ matrix.platform }}-v${{ env.BRANCH_NAME }}.zip
+          VERSION: ${{ env.BRANCH_NAME }}

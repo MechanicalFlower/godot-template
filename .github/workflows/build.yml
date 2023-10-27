@@ -2,18 +2,14 @@ name: Build
 
 on:
   push:
-    branches: [4.x]
-    tags: ['*']
-  pull_request:
-    branches: [4.x]
   workflow_dispatch:
 
 env:
-  tag_name: ${{ github.ref_name }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 30
 
     strategy:
@@ -38,21 +34,21 @@ jobs:
 
       - uses: MechanicalFlower/magic_combo@main
         with:
-          command: script.add-config-to-github-env
+          command: 'mcx -f .combo.yaml script.add-config-to-github-env'
 
       - uses: MechanicalFlower/magic_combo@main
         with:
-          command: script.bump-version
+          command: 'mcx -f .combo.yaml script.bump-version'
 
       - name: Ensure version is equal to tag
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          [ "${{ env.game_version }}" == "${{ env.tag_name }}" ] || exit 2
+          [ "${{ env.game_version }}" == "${{ env.BRANCH_NAME }}" ] || exit 2
 
-      - name: Export Greeter
+      - name: Export Marble
         uses: ./.github/actions/export-game
         with:
-          name: Greeter
+          name: Marble
           platform: ${{ matrix.platform }}
           preset: ${{ matrix.preset }}
           version: ${{ env.game_version }}
@@ -61,17 +57,17 @@ jobs:
       - name: Upload artifact
         uses: ./.github/actions/upload-artifact
         with:
-          name: Greeter-${{ matrix.platform }}-v${{ env.game_version }}
+          name: Marble-${{ matrix.platform }}-v${{ env.game_version }}
           path: build/${{ matrix.platform }}
 
       # Installing rsync is needed in order to deploy to GitHub Pages. Without it, the build will fail.
       - name: Install rsync
-        if: ${{ matrix.platform == 'web' }}
+        if: ${{ (matrix.platform == 'web') && (env.BRANCH_NAME == 'main') }}
         run: |
           apt-get update && apt-get install -y rsync
 
       - name: Deploy to GitHub Pages
-        if: ${{ matrix.platform == 'web' }}
+        if: ${{ (matrix.platform == 'web') && (env.BRANCH_NAME == 'main') }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
