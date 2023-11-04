@@ -33,7 +33,7 @@ repos:
           .reuse/|
           LICENSES/|
           public/|
-          Makefile|
+          Justfile|
           CONTRIBUTING.md|
           CHANGELOG.md|
           CREDITS.md|

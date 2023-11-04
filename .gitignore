@@ -17,3 +17,8 @@ addons/*
 
 # Python-specific ignores
 venv/
+
+# Export output
+dist/
+build/
+override.cfg
