@@ -1,5 +1,0 @@
-godot:
-  version: '4.1.2'
-game:
-  name: Greeter
-  version: '0.1.1'
