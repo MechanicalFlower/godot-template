@@ -49,6 +49,33 @@ jobs:
           path: dist/*
           retention-days: 1
 
+  deploy:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    needs: [check]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v1
+
+      - name: Load dotenv
+        run: just ci-load-dotenv
+
+      - name: Export
+        run: just export-web
+
+      # Installing rsync is needed in order to deploy to GitHub Pages. Without it, the build will fail.
+      - name: Install rsync
+        run: |
+          sudo apt-get update && sudo apt-get install -y rsync
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: build/web
+
   publish:
     runs-on: ubuntu-22.04
     timeout-minutes: 30
@@ -76,15 +103,3 @@ jobs:
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # # Installing rsync is needed in order to deploy to GitHub Pages. Without it, the build will fail.
-      # - name: Install rsync
-      #   run: |
-      #     apt-get update && apt-get install -y rsync
-      #
-      # - name: Deploy to GitHub Pages
-      #   uses: JamesIves/github-pages-deploy-action@v4
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: gh-pages
-      #     folder: build/web
