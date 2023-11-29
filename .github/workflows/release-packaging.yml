@@ -54,6 +54,8 @@ jobs:
     timeout-minutes: 30
     needs: [check]
 
+    if: github.ref == 'refs/heads/main'
+
     steps:
       - uses: actions/checkout@v4
       - uses: extractions/setup-just@v1
