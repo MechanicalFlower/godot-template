@@ -113,7 +113,7 @@ import-resources:
 
     echo "Create the override.cfg"
     touch override.cfg
-    echo -e "[build_info]\npackage/version={{ game_version }}\npackage/build_date={{ build_date }}\nsource/commit={{ commit_hash }}" > override.cfg
+    echo '[build_info]\npackage/version="{{ game_version }}"\npackage/build_date="{{ build_date }}"\nsource/commit="{{ commit_hash }}"' > override.cfg
 
 # Godot binary wrapper
 @godot *ARGS: makedirs install-godot install-templates
@@ -147,6 +147,11 @@ export-linux: bump-version install-addons import-resources
     (cd {{ build_dir }}/linux && zip {{ game_name }}-linux-v{{ game_version }}.zip -r .)
     mv {{ build_dir }}/linux/{{ game_name }}-linux-v{{ game_version }}.zip {{ dist_dir }}/{{ game_name }}-linux-v{{ game_version }}.zip
     rm -rf {{ build_dir }}/linux
+
+# Export game for the web
+export-web: bump-version install-addons import-resources
+    mkdir -p {{ build_dir }}/web
+    just godot --export-release "Web" --headless {{ build_dir }}/web/index.html
 
 # Export on all platform
 export: export-windows export-mac export-linux
