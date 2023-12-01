@@ -19,6 +19,17 @@
         "packageNameTemplate": "https://github.com/{{{gitUrl}}}",
         "versioningTemplate": "git",
         "datasourceTemplate": "git-tags"
+      },
+      {
+        "fileMatch": ["^.env$"],
+        "matchStrings": [
+            "GODOT_VERSION=(?<currentValue>.*?)\\n"
+        ],
+        "depNameTemplate": "godotengine/godot",
+        "packageNameTemplate": "https://github.com/godotengine/godot",
+        "versioningTemplate": "loose",
+        "extractVersionTemplate": "^(?<version>.*)-stable$",
+        "datasourceTemplate": "git-tags"
       }
     ]
-  }
+}
