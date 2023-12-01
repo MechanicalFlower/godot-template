@@ -27,7 +27,21 @@ dist_dir := justfile_directory() / "dist"
 
 # Godot variables
 godot_version := env_var('GODOT_VERSION')
-godot_platform := if arch() == "x86" { "linux.x86_32" } else { if arch() == "x86_64" { "linux.x86_64" } else { "" } }
+godot_platform := if arch() == "x86" {
+ "linux.x86_32"
+} else {
+  if arch() == "x86_64" {
+    "linux.x86_64"
+  } else {
+    if arch() == "arm" {
+      "linux.arm32"
+    } else {
+      if arch() == "aarch64" {
+        "linux.arm64"
+      } else { "" }
+    }
+  }
+}
 godot_filename := "Godot_v" + godot_version + "-stable_" + godot_platform
 godot_template := "Godot_v" + godot_version + "-stable_export_templates.tpz"
 godot_bin := bin_dir / godot_filename
