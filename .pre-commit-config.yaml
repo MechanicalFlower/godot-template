@@ -32,6 +32,7 @@ repos:
       (?x)^(
           .reuse/|
           LICENSES/|
+          docs/|
           public/|
           Justfile|
           CONTRIBUTING.md|

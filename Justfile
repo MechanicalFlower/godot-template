@@ -220,3 +220,16 @@ publish:
     just butler push {{ dist_dir }}/{{ game_name }}-windows-v{{ game_version }}.zip mechanical-flower/{{ game_itchio_key }}:windows --userversion {{ game_version }}
     just butler push {{ dist_dir }}/{{ game_name }}-mac-v{{ game_version }}.zip mechanical-flower/{{ game_itchio_key }}:mac --userversion {{ game_version }}
     just butler push {{ dist_dir }}/{{ game_name }}-linux-v{{ game_version }}.zip mechanical-flower/{{ game_itchio_key }}:linux --userversion {{ game_version }}
+
+@install-doc-deps:
+    just venv pip install mkdocs==1.5.3 mkdocs-literate-nav==0.6.1
+
+
+doc: install-addons install-doc-deps
+    just godot --editor --headless --quit --script addons/godot-autogen-docs/reference_collector_cli.gd
+    just godot --headless --quit --script addons/godot-autogen-docs/markdown.gd
+    just venv mkdocs build
+
+serve: install-doc-deps
+    just venv pip install mkdocs==1.5.3 mkdocs-literate-nav==0.6.1
+    just venv mkdocs serve

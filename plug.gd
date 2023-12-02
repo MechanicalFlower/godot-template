@@ -8,3 +8,6 @@ func _plugging():
 
 	# Patched version
 	plug("florianvazelle/EasyMenus", {"commit": "3b8602985191f6a128808068d250b5b336d05379"})
+
+	# Dev
+	plug("MechanicalFlower/godot-autogen-docs", {"commit": "223ad605e5b5d1b0c2efb527740851522f345e9b", "dev": true})

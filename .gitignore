@@ -22,3 +22,7 @@ venv/
 dist/
 build/
 override.cfg
+
+# Docs output
+site/
+reference.json
