@@ -93,7 +93,7 @@ jobs:
         run: just ci-load-dotenv
 
       - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v3
         with:
           workflow: ${{ github.event.workflow_run.workflow_id }}
           name: ${{ env.game_name }}-v${{ env.game_version }}
