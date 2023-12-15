@@ -43,7 +43,7 @@ jobs:
         run: just export
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.game_name }}-v${{ env.game_version }}
           path: dist/*
