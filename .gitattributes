@@ -1,4 +1,11 @@
+# Properly detect languages on Github.
+*.gd linguist-language=GDScript
+
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
-*.gd linguist-language=GDScript
+
+# The above only works properly for Git 2.10+, so for older versions
+# we need to manually list the binary files we don't want modified.
+*.mp3 binary
+*.png binary
 *.hdr binary

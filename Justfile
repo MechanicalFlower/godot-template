@@ -127,7 +127,7 @@ import-resources:
 
     echo "Create the override.cfg"
     touch override.cfg
-    echo '[build_info]\npackage/version="{{ game_version }}"\npackage/build_date="{{ build_date }}"\nsource/commit="{{ commit_hash }}"' > override.cfg
+    echo -e '[build_info]\npackage/version="{{ game_version }}"\npackage/build_date="{{ build_date }}"\nsource/commit="{{ commit_hash }}"' > override.cfg
 
 # Godot binary wrapper
 @godot *ARGS: makedirs install-godot install-templates
@@ -139,7 +139,7 @@ editor:
 
 # Run files formatters
 fmt:
-    just venv pip install pre-commit==3.3.3 reuse==2.1.0 gdtoolkit==4.*
+    just venv pip install pre-commit==3.5.0 reuse==2.1.0 gdtoolkit==4.*
     just venv pre-commit run -a
 
 # Export game on Windows
@@ -187,7 +187,7 @@ clean-resources:
 # Remove game plugins
 clean-addons:
     rm -rf .plugged
-    [ -f plug.gd ] && find addons/ -type d -not -name 'addons' -not -name 'gd-plug' -exec rm -rf {} \; || true
+    [ -f plug.gd ] && find addons/ -maxdepth 1 -type d -not -name 'addons' -not -name 'gd-plug' -exec rm -rf {} \; || true
 
 # Remove any unnecessary files
 clean: clean-export clean-resources clean-addons
