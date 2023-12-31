@@ -1,35 +1,35 @@
 {
-    "regexManagers": [
-      {
-        "fileMatch": ["^plug\\.gd$"],
-        "matchStrings": [
-            "\\s+plug\\(\"(?<gitUrl>.*?)\",\\ \\{\\s*\"commit\":\\ \"(?<currentValue>)(?<currentDigest>.*?)\""
-        ],
-        "depNameTemplate": "{{{gitUrl}}}",
-        "packageNameTemplate": "https://github.com/{{{gitUrl}}}",
-        "versioningTemplate": "git",
-        "datasourceTemplate": "git-refs"
-      },
-      {
-        "fileMatch": ["^plug\\.gd$"],
-        "matchStrings": [
-            "\\s+plug\\(\"(?<gitUrl>.*?)\",\\ \\{\\s*\"tag\":\\ \"(?<currentValue>)(?<currentDigest>.*?)\""
-        ],
-        "depNameTemplate": "{{{gitUrl}}}",
-        "packageNameTemplate": "https://github.com/{{{gitUrl}}}",
-        "versioningTemplate": "git",
-        "datasourceTemplate": "git-tags"
-      },
-      {
-        "fileMatch": ["^.env$"],
-        "matchStrings": [
-            "GODOT_VERSION=(?<currentValue>.*?)\\n"
-        ],
-        "depNameTemplate": "godotengine/godot",
-        "packageNameTemplate": "https://github.com/godotengine/godot",
-        "versioningTemplate": "loose",
-        "extractVersionTemplate": "^(?<version>.*)-stable$",
-        "datasourceTemplate": "git-tags"
-      }
-    ]
+  "regexManagers": [
+    {
+      "fileMatch": ["^plug\\.gd$"],
+      "matchStrings": [
+          "\\s+plug\\(\"(?<gitUrl>.*?)\",\\ \\{\\s*\"commit\":\\ \"(?<currentValue>)(?<currentDigest>.*)\""
+      ],
+      "depNameTemplate": "{{{gitUrl}}}",
+      "packageNameTemplate": "https://github.com/{{{gitUrl}}}",
+      "versioningTemplate": "git",
+      "datasourceTemplate": "git-refs"
+    },
+    {
+      "fileMatch": ["^plug\\.gd$"],
+      "matchStrings": [
+          "\\s+plug\\(\"(?<gitUrl>.*?)\",\\ \\{\\s*\"tag\":\\ \"(?<currentValue>.*)\""
+      ],
+      "depNameTemplate": "{{{gitUrl}}}",
+      "packageNameTemplate": "https://github.com/{{{gitUrl}}}",
+      "versioningTemplate": "git",
+      "datasourceTemplate": "git-tags"
+    },
+    {
+      "fileMatch": ["^.env$"],
+      "matchStrings": [
+          "GODOT_VERSION=(?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "godotengine/godot",
+      "packageNameTemplate": "https://github.com/godotengine/godot",
+      "versioningTemplate": "loose",
+      "extractVersionTemplate": "^(?<version>.*)-stable$",
+      "datasourceTemplate": "git-tags"
+    }
+  ]
 }
