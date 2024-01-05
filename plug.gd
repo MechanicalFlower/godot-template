@@ -7,4 +7,4 @@ func _plugging():
 	plug("nisovin/godot-coi-serviceworker", {"commit": "de1be2989eda4c7d77a08b8c56cd94c769181c4e"})
 
 	# Patched version
-	plug("florianvazelle/EasyMenus", {"commit": "3b8602985191f6a128808068d250b5b336d05379"})
+	plug("florianvazelle/EasyMenus", {"commit": "4d960ef6ab9f51a206e2eb40c2cc0b8f8eced71a"})
