@@ -40,7 +40,7 @@ jobs:
         run: just ci-load-dotenv
 
       - name: Cache Godot
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.mkflower/bin
@@ -72,7 +72,7 @@ jobs:
         run: just ci-load-dotenv
 
       - name: Cache Godot
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.mkflower/bin
