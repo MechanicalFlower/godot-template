@@ -226,7 +226,7 @@ export: export-windows export-mac export-linux
 # Remove game plugins
 clean-addons:
     rm -rf .plugged
-    [ -f plug.gd ] && (cd addons/ && git clean -X -d) || true
+    [ -f plug.gd ] && (cd addons/ && git clean -f -X -d) || true
 
 # Remove files created by Godot
 clean-resources:
