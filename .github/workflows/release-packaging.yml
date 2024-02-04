@@ -39,6 +39,14 @@ jobs:
       - name: Load dotenv
         run: just ci-load-dotenv
 
+      - name: Cache Godot
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.mkflower/bin
+            ~/.local/share/godot/export_templates
+          key: ${{ env.godot_version }}
+
       - name: Export
         run: just export
 
@@ -62,6 +70,14 @@ jobs:
 
       - name: Load dotenv
         run: just ci-load-dotenv
+
+      - name: Cache Godot
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.mkflower/bin
+            ~/.local/share/godot/export_templates
+          key: ${{ env.godot_version }}
 
       - name: Export
         run: just export-web
