@@ -1,8 +1,9 @@
 #!/usr/bin/env -S just --justfile
 
+# === Settings ===
+
 set dotenv-load := true
 
-export PIP_REQUIRE_VIRTUALENV := "true"
 
 # === Aliases ===
 
@@ -42,10 +43,11 @@ godot_platform := if arch() == "x86" {
     }
   }
 }
-godot_filename := "Godot_v" + godot_version + "-stable_" + godot_platform
-godot_template := "Godot_v" + godot_version + "-stable_export_templates.tpz"
+godot_filename := "Godot_v" + godot_version + "_" + godot_platform
+godot_template := "Godot_v" + godot_version + "_export_templates.tpz"
 godot_bin := bin_dir / godot_filename
-godot_editor_data_dir := "~/.local/share/godot/"
+godot_editor_data_dir := "~/.local/share/godot"
+godot_templates_dir := godot_editor_data_dir / "export_templates" / replace_regex(godot_version, "([^-]+)-([^-]+)", "$1.$2")
 
 # Game variables
 game_name := env_var('GAME_NAME')
@@ -55,7 +57,6 @@ game_itchio_key := env_var_or_default('GAME_ITCHIO_KEY', "")
 # Build info
 datetime := `date '+%Y%m%d'`
 short_version := replace_regex(game_version, "([0-9]+).([0-9]+).[0-9]+", "$1.$2")
-build_date := `date +'%Y/%m/%d'`
 commit_hash := `git log --pretty=format:"%H" -1`
 
 # Python virtualenv
@@ -77,45 +78,103 @@ butler_platform := if arch() == "x86" { "linux-386" } else { if arch() == "x86_6
 @makedirs:
     mkdir -p {{ cache_dir }} {{ bin_dir }} {{ build_dir }} {{ dist_dir }}
 
+# === Installer ===
+#
+# Recipes that check and/or install some binaries like Godot, Bulter ...
+# This means the user doesn't have to worry about installation,
+# and can be sure that the same code is running in CI and locally.
+
+# Download Godot
+[private]
+install-godot: makedirs
+    curl -L --silent -X GET "https://github.com/godotengine/godot-builds/releases/download/{{ godot_version }}/{{ godot_filename }}.zip" --output {{ cache_dir }}/{{ godot_filename }}.zip
+    unzip -o {{ cache_dir }}/{{ godot_filename }}.zip -d {{ cache_dir }}
+    cp {{ cache_dir }}/{{ godot_filename }} {{ godot_bin }}
+
+# Download Godot if not already done
+[private]
+@check-godot:
+    [ ! -e {{ godot_bin }} ] && just install-godot || true
+
+# Download Godot export templates
+[private]
+install-templates: makedirs
+    curl -L --silent -X GET "https://github.com/godotengine/godot-builds/releases/download/{{ godot_version }}/{{ godot_template }}" --output {{ cache_dir }}/{{ godot_template }}
+    unzip -o {{ cache_dir }}/{{ godot_template }} -d {{ cache_dir }}
+    mkdir -p {{ godot_templates_dir }}
+    cp {{ cache_dir }}/templates/* {{ godot_templates_dir }}
+
+# Download Godot export templates if not already done
+[private]
+@check-templates:
+    [ ! -d {{ godot_templates_dir }} ] && just install-templates || true
+
+# Download Butler
+[private]
+install-butler: makedirs
+    curl -L --silent -X GET "https://broth.itch.ovh/butler/{{ butler_platform }}/LATEST/archive/default" --output {{ cache_dir }}/butler.zip
+    unzip -o {{ cache_dir }}/butler.zip -d {{ cache_dir }}
+    mv {{ cache_dir }}/butler {{ butler_bin }}
+    chmod +x {{ butler_bin }}
+
+# Download Butler if not already done
+[private]
+@check-butler:
+    [ ! -e {{ butler_bin }} ] && just install-butler || true
+
+# === Python ===
+#
+# Recipes that use python or python packages.
+# This ensures that all python packages are installed in a virtual environment.
+
+export PIP_REQUIRE_VIRTUALENV := "true"
+
 # Python virtualenv wrapper
 [private]
 @venv *ARGS:
     [ ! -d {{ venv_dir }} ] && python3 -m venv {{ venv_dir }} || true
     . {{ venv_dir }}/bin/activate && {{ ARGS }}
 
-# Download Godot
-[private]
-install-godot:
-    #!/usr/bin/env sh
-    if [ ! -e {{ godot_bin }} ]
-    then
-        curl -X GET "https://downloads.tuxfamily.org/godotengine/{{ godot_version }}/{{ godot_filename }}.zip" --output {{ cache_dir }}/{{ godot_filename }}.zip
-        unzip {{ cache_dir }}/{{ godot_filename }}.zip -d {{ cache_dir }}
-        cp {{ cache_dir }}/{{ godot_filename }} {{ godot_bin }}
-    fi
+# Run files formatters
+fmt:
+    just venv pip install pre-commit==3.*
+    just venv pre-commit run -a
 
-# Download Godot export templates
-[private]
-install-templates:
-    #!/usr/bin/env sh
-    if [ ! -d {{ godot_editor_data_dir }}/export_templates/{{ godot_version }}.stable ]
-    then
-        curl -X GET "https://downloads.tuxfamily.org/godotengine/{{ godot_version }}/{{ godot_template }}" --output {{ cache_dir }}/{{ godot_template }}
-        unzip {{ cache_dir }}/{{ godot_template }} -d {{ cache_dir }}
-        mkdir -p {{ godot_editor_data_dir }}/export_templates/{{ godot_version }}.stable
-        cp {{ cache_dir }}/templates/* {{ godot_editor_data_dir }}/export_templates/{{ godot_version }}.stable
-    fi
+# Generate the CREDTIS.md file
+credits:
+    just venv python ./generate_credits.py
+
+# === Godot ===
+#
+# Recipes around the Godot binary.
+# This simplifies some recurring tasks, such as installing addons.
+
+# Godot binary wrapper
+godot *ARGS: check-godot check-templates
+    {{ godot_bin }} {{ ARGS }}
 
 # Download game plugins
-install-addons:
-    [ -f plug.gd ] && just godot --headless --script plug.gd install || true
+@install-addons:
+    [ -f plug.gd ] && just godot --headless --script plug.gd install force || true
 
 # Workaround from https://github.com/godotengine/godot/pull/68461
 # Import game resources
-import-resources:
+@import-resources:
     just godot --headless --export-pack null /dev/null
     # timeout 60 just godot --editor || true
     # just godot --headless --quit --editor
+
+# Open the Godot editor
+@editor:
+    just godot --editor
+
+# === Butler ===
+
+# Bulter wrapper
+butler *ARGS: check-butler
+    {{ butler_bin }} {{ ARGS }}
+
+# === Export ===
 
 # Updates the game version for export
 @bump-version:
@@ -125,72 +184,65 @@ import-resources:
     sed -i "s,application/version=.*$,application/version=\"{{ game_version }}\",g" ./export_presets.cfg
     sed -i "s,application/short_version=.*$,application/short_version=\"{{ short_version }}\",g" ./export_presets.cfg
 
-    echo "Create the override.cfg"
-    touch override.cfg
-    echo -e '[build_info]\npackage/version="{{ game_version }}"\npackage/build_date="{{ build_date }}"\nsource/commit="{{ commit_hash }}"' > override.cfg
+    echo "Update version in the project.godot"
+    sed -i "s,config/version=.*$,config/version=\"{{ game_version }}\",g" ./project.godot
 
-# Godot binary wrapper
-@godot *ARGS: makedirs install-godot install-templates
-    {{ godot_bin }} {{ ARGS }}
-
-# Open the Godot editor
-editor:
-    just godot --editor
-
-# Run files formatters
-fmt:
-    just venv pip install pre-commit==3.5.0 reuse==2.1.0 gdtoolkit==4.*
-    just venv pre-commit run -a
+[private]
+pre-export: clean-addons makedirs bump-version install-addons import-resources
 
 # Export game on Windows
-export-windows: bump-version install-addons import-resources
+export-windows: pre-export
     mkdir -p {{ build_dir }}/windows
-    just godot --export-release '"Windows Desktop"' --headless {{ build_dir }}/windows/{{ game_name }}.exe
+    just godot --headless --export-release '"Windows Desktop"' {{ build_dir }}/windows/{{ game_name }}.exe
     (cd {{ build_dir }}/windows && zip {{ game_name }}-windows-v{{ game_version }}.zip -r .)
     mv {{ build_dir }}/windows/{{ game_name }}-windows-v{{ game_version }}.zip {{ dist_dir }}/{{ game_name }}-windows-v{{ game_version }}.zip
     rm -rf {{ build_dir }}/windows
 
 # Export game on MacOS
-export-mac: bump-version install-addons import-resources
-    just godot --export-release "macOS" --headless {{ dist_dir }}/{{ game_name }}-mac-v{{ game_version }}.zip
+export-mac: pre-export
+    just godot --headless --export-release "macOS" {{ dist_dir }}/{{ game_name }}-mac-v{{ game_version }}.zip
 
 # Export game on Linux
-export-linux: bump-version install-addons import-resources
+export-linux: pre-export
     mkdir -p {{ build_dir }}/linux
-    just godot --export-release "Linux/X11" --headless {{ build_dir }}/linux/{{ game_name }}.x86_64
+    just godot --headless --export-release "Linux/X11" {{ build_dir }}/linux/{{ game_name }}.x86_64
     (cd {{ build_dir }}/linux && zip {{ game_name }}-linux-v{{ game_version }}.zip -r .)
     mv {{ build_dir }}/linux/{{ game_name }}-linux-v{{ game_version }}.zip {{ dist_dir }}/{{ game_name }}-linux-v{{ game_version }}.zip
     rm -rf {{ build_dir }}/linux
 
 # Export game for the web
-export-web: bump-version install-addons import-resources
+export-web: pre-export
     mkdir -p {{ build_dir }}/web
-    just godot --export-release "Web" --headless {{ build_dir }}/web/index.html
+    just godot --headless --export-release "Web" {{ build_dir }}/web/index.html
 
 # Export on all platform
 export: export-windows export-mac export-linux
 
-# Remove cache and binaries created by this Justfile
-[private]
-clean-mkflower:
-    rm -rf {{ main_dir }}
-    rm -rf {{ venv_dir }}
+# === Clean ===
+#
+# Recipes that clean up the project, deleting
+# files and folders created by this Justfile.
 
-# Remove files created during the export
-clean-export:
-    rm -rf {{ build_dir }} {{ dist_dir }}
+# Remove game plugins
+clean-addons:
+    rm -rf .plugged
+    [ -f plug.gd ] && (cd addons/ && git clean -X -d) || true
 
 # Remove files created by Godot
 clean-resources:
     rm -rf .godot
 
-# Remove game plugins
-clean-addons:
-    rm -rf .plugged
-    [ -f plug.gd ] && find addons/ -maxdepth 1 -type d -not -name 'addons' -not -name 'gd-plug' -exec rm -rf {} \; || true
+# Remove files created during the export
+clean-export:
+    rm -rf {{ build_dir }} {{ dist_dir }}
 
 # Remove any unnecessary files
-clean: clean-export clean-resources clean-addons
+clean: clean-addons clean-resources clean-export
+
+# === CI ===
+#
+# Recipes launched by CI steps.
+# They can be run locally, but requires the setup of some environment variables.
 
 # Add some variables to Github env
 ci-load-dotenv:
@@ -198,24 +250,8 @@ ci-load-dotenv:
     echo "game_name={{ game_name }}" >> $GITHUB_ENV
     echo "game_version={{ game_version }}" >> $GITHUB_ENV
 
-# Download Butler
-[private]
-install-butler: makedirs
-    #!/usr/bin/env sh
-    if [ ! -e {{ butler_bin }} ]
-    then
-        curl -L -X GET "https://broth.itch.ovh/butler/{{ butler_platform }}/LATEST/archive/default" --output {{ cache_dir }}/butler.zip
-        unzip {{ cache_dir }}/butler.zip -d {{ cache_dir }}
-        mv {{ cache_dir }}/butler {{ butler_bin }}
-        chmod +x {{ butler_bin }}
-    fi
-
-# Bulter wrapper
-@butler *ARGS: install-butler
-    {{ butler_bin }} {{ ARGS }}
-
 # Upload the game on Github and Itch.io
-publish:
+ci-publish:
     gh release create "{{ game_version }}" --title="v{{ game_version }}" --generate-notes {{ dist_dir }}/*
     just butler push {{ dist_dir }}/{{ game_name }}-windows-v{{ game_version }}.zip mechanical-flower/{{ game_itchio_key }}:windows --userversion {{ game_version }}
     just butler push {{ dist_dir }}/{{ game_name }}-mac-v{{ game_version }}.zip mechanical-flower/{{ game_itchio_key }}:mac --userversion {{ game_version }}

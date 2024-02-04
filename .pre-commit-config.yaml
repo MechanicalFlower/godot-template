@@ -2,6 +2,8 @@ repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.4.0
   hooks:
+  - id: check-added-large-files # Prevent giant files from being committed
+    args: ['--maxkb=1500']
   - id: fix-byte-order-marker   # Prevents weird UTF-8 encoding edge cases
   - id: check-case-conflict     # Check if case-insensitive filesystems would bork
   - id: check-docstring-first   # Check for if docstring was misplaced
@@ -21,37 +23,36 @@ repos:
   rev: v2.2.5
   hooks:
   - id: codespell
+- repo: https://github.com/Scony/godot-gdscript-toolkit
+  rev: 4.2.2
+  hooks:
+  - id: gdformat
+    exclude: '^addons/gd-plug/'
+  - id: gdlint
+    exclude: '^addons/gd-plug/'
 - repo: local
   hooks:
-  - id: lower-case-only
-    name: lower case only
+  - id: check-filenames-are-lowercase
+    name: check that filenames are lowercase
     entry: filenames must be lower-case or lower_case only
     language: fail
     files: '[^a-z0-9._/-]'
     exclude: |
       (?x)^(
+          .godot/|
           .reuse/|
+          addons/gd-plug/|
+          CHANGELOG.md|
+          CONTRIBUTING.md|
+          CREDITS.md|
+          Justfile|
+          LICENSE.md|
           LICENSES/|
           public/|
-          Justfile|
-          CONTRIBUTING.md|
-          CHANGELOG.md|
-          CREDITS.md|
-          LICENSE.md|
           README.md
       )
-  - id: check-gdscript
-    name: check gdscript
-    entry: gdformat
-    language: system
-    files: \.gd$
-    exclude: |
-      (?x)^(
-          addons/|
-          plug.gd
-      )
-  - id: check-shaders
-    name: check shaders
+  - id: format-shaders
+    name: format shaders
     entry: clang-format
     args:
       - --style=llvm
@@ -59,14 +60,4 @@ repos:
       - -i
     language: system
     files: \.gdshader$
-    exclude: ^addons/
-  - id: lint-gdscript
-    name: lint gdscript
-    entry: gdlint
-    language: system
-    files: \.gd$
-    exclude: |
-      (?x)^(
-          addons/|
-          plug.gd
-      )
+    exclude: ^addons/gd-plug/

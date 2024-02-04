@@ -117,7 +117,7 @@ jobs:
           skip_unpack: false
 
       - name: Publish
-        run: just publish
+        run: just ci-publish
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
