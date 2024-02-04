@@ -28,3 +28,13 @@ Files: addons/EasyMenus/*
 Copyright: 2022 Savo Vuksan
 License: MIT
 Source: https://github.com/SavoVuksan/EasyMenus
+
+Files: addons/coi_serviceworker/*
+Copyright: 2023 nisovin
+License: MIT
+Source: https://github.com/nisovin/godot-coi-serviceworker
+
+Files: addons/logger/*
+Copyright: 2018 albinaask
+License: MIT
+Source: https://github.com/albinaask/Log
