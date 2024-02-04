@@ -3,7 +3,7 @@
     {
       "fileMatch": ["^plug\\.gd$"],
       "matchStrings": [
-          "\\s+plug\\(\"(?<gitUrl>.*?)\",\\ \\{\\s*\"commit\":\\ \"(?<currentValue>)(?<currentDigest>.*)\""
+          "\\s+plug\\(\"(?<gitUrl>.*?)\",\\ \\{\\s*\"commit\":\\ \"(?<currentDigest>.*)\",\\s*\"renovate-branch\":\\ \"(?<currentValue>.*)\""
       ],
       "depNameTemplate": "{{{gitUrl}}}",
       "packageNameTemplate": "https://github.com/{{{gitUrl}}}",
@@ -28,7 +28,7 @@
       "depNameTemplate": "godotengine/godot",
       "packageNameTemplate": "https://github.com/godotengine/godot",
       "versioningTemplate": "loose",
-      "extractVersionTemplate": "^(?<version>.*)-stable$",
+      "extractVersionTemplate": "^(?<version>.*)$",
       "datasourceTemplate": "git-tags"
     }
   ]
