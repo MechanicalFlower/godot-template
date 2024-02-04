@@ -70,7 +70,7 @@ butler_platform := if arch() == "x86" { "linux-386" } else { if arch() == "x86_6
 
 # Display all commands
 @default:
-    echo "OS: {{ os() }} - ARCH: {{ arch() }}\n"
+    echo -e "OS: {{ os() }} - ARCH: {{ arch() }}\n"
     just --list
 
 # Create directories
@@ -87,7 +87,7 @@ butler_platform := if arch() == "x86" { "linux-386" } else { if arch() == "x86_6
 # Download Godot
 [private]
 install-godot: makedirs
-    curl -L --silent -X GET "https://github.com/godotengine/godot-builds/releases/download/{{ godot_version }}/{{ godot_filename }}.zip" --output {{ cache_dir }}/{{ godot_filename }}.zip
+    curl -L --progress-bar -X GET "https://github.com/godotengine/godot-builds/releases/download/{{ godot_version }}/{{ godot_filename }}.zip" --output {{ cache_dir }}/{{ godot_filename }}.zip
     unzip -o {{ cache_dir }}/{{ godot_filename }}.zip -d {{ cache_dir }}
     cp {{ cache_dir }}/{{ godot_filename }} {{ godot_bin }}
 
@@ -99,7 +99,7 @@ install-godot: makedirs
 # Download Godot export templates
 [private]
 install-templates: makedirs
-    curl -L --silent -X GET "https://github.com/godotengine/godot-builds/releases/download/{{ godot_version }}/{{ godot_template }}" --output {{ cache_dir }}/{{ godot_template }}
+    curl -L --progress-bar -X GET "https://github.com/godotengine/godot-builds/releases/download/{{ godot_version }}/{{ godot_template }}" --output {{ cache_dir }}/{{ godot_template }}
     unzip -o {{ cache_dir }}/{{ godot_template }} -d {{ cache_dir }}
     mkdir -p {{ godot_templates_dir }}
     cp {{ cache_dir }}/templates/* {{ godot_templates_dir }}
@@ -132,7 +132,7 @@ export PIP_REQUIRE_VIRTUALENV := "true"
 # Python virtualenv wrapper
 [private]
 @venv *ARGS:
-    [ ! -d {{ venv_dir }} ] && python3 -m venv {{ venv_dir }} || true
+    [ ! -d {{ venv_dir }} ] && python3 -m venv {{ venv_dir }} && touch {{ venv_dir }}/.gdignore || true
     . {{ venv_dir }}/bin/activate && {{ ARGS }}
 
 # Run files formatters
