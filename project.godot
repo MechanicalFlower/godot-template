@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Greeter"
 run/main_scene="res://scenes/menu.tscn"
-config/features=PackedStringArray("4.1")
+config/features=PackedStringArray("4.2")
 config/icon="res://assets/icon.png"
 
 [audio]
@@ -25,9 +25,14 @@ GlobalSignal="*res://scripts/framework/global_signal.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 MenuTemplateManager="*res://addons/EasyMenus/Nodes/menu_template_manager.tscn"
 
+[custom_options]
+
+build_info/commit="1415cb842c9af52a1f5c20957c8d4288f39ffbba"
+build_info/date="2024/02/04"
+
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg","res://addons/coi_serviceworker/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg","res://addons/coi_serviceworker/plugin.cfg","res://addons/export-build-info/plugin.cfg")
 
 [filesystem]
 

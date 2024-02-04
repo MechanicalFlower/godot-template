@@ -39,6 +39,14 @@ jobs:
       - name: Load dotenv
         run: just ci-load-dotenv
 
+      - name: Cache Godot
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.mkflower/bin
+            ~/.local/share/godot/export_templates
+          key: ${{ env.godot_version }}
+
       - name: Export
         run: just export
 
@@ -62,6 +70,14 @@ jobs:
 
       - name: Load dotenv
         run: just ci-load-dotenv
+
+      - name: Cache Godot
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.mkflower/bin
+            ~/.local/share/godot/export_templates
+          key: ${{ env.godot_version }}
 
       - name: Export
         run: just export-web
@@ -101,7 +117,7 @@ jobs:
           skip_unpack: false
 
       - name: Publish
-        run: just publish
+        run: just ci-publish
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

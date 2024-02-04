@@ -1,4 +1,3 @@
-
 [codespell]
 skip = assets/**,addons/**,LICENSES/**
 ignore-words-list = lod,LOD
