@@ -3,7 +3,7 @@
     {
       "fileMatch": ["^plug\\.gd$"],
       "matchStrings": [
-          "\\s+plug\\(\"(?<gitUrl>.*?)\",\\ \\{\\s*\"commit\":\\ \"(?<currentDigest>.*)\",\\s*\"renovate-branch\":\\ \"(?<currentValue>.*)\""
+          "\\s+plug\\(\"(?<gitUrl>.*?)\",\\ \\{\\s*\"commit\":\\ \"(?<currentDigest>.*)\",\\ \\s*\"renovate-branch\":\\ \"(?<currentValue>.*)\""
       ],
       "depNameTemplate": "{{{gitUrl}}}",
       "packageNameTemplate": "https://github.com/{{{gitUrl}}}",
