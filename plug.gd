@@ -18,7 +18,7 @@ func _plugging():
 	# Patched version
 	plug(
 		"florianvazelle/EasyMenus",
-		{"commit": "4d960ef6ab9f51a206e2eb40c2cc0b8f8eced71a", "renovate-branch": "master"}
+		{"commit": "018ab39001f862abbd6ca424258a9a548589d61c", "renovate-branch": "master"}
 	)
 	plug(
 		"florianvazelle/Log",
