@@ -49,7 +49,8 @@ repos:
           LICENSE.md|
           LICENSES/|
           public/|
-          README.md
+          README.md|
+          RELEASING.md
       )
   - id: format-shaders
     name: format shaders

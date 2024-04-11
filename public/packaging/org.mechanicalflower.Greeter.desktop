@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Type=Application
+
+Name=Greeter
+Comment==Godot template.
+Categories=Game;
+
+Icon=org.mechanicalflower.Greeter
+Exec=greeter-wrapper
+Terminal=false

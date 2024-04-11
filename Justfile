@@ -4,7 +4,6 @@
 
 set dotenv-load := true
 
-
 # === Aliases ===
 
 [private]
@@ -22,7 +21,7 @@ main_dir := home_dir / ".mkflower"
 cache_dir := main_dir / "cache"
 bin_dir := main_dir / "bin"
 
-# Local directories
+# Local directories for game exports
 build_dir := justfile_directory() / "build"
 dist_dir := justfile_directory() / "dist"
 
@@ -30,18 +29,14 @@ dist_dir := justfile_directory() / "dist"
 godot_version := env_var('GODOT_VERSION')
 godot_platform := if arch() == "x86" {
  "linux.x86_32"
-} else {
-  if arch() == "x86_64" {
+} else if arch() == "x86_64" {
     "linux.x86_64"
-  } else {
-    if arch() == "arm" {
-      "linux.arm32"
-    } else {
-      if arch() == "aarch64" {
-        "linux.arm64"
-      } else { "" }
-    }
-  }
+} else if arch() == "arm" {
+    "linux.arm32"
+} else if arch() == "aarch64" {
+    "linux.arm64"
+} else {
+    ""
 }
 godot_filename := "Godot_v" + godot_version + "_" + godot_platform
 godot_template := "Godot_v" + godot_version + "_export_templates.tpz"
@@ -64,7 +59,13 @@ venv_dir := justfile_directory() / "venv"
 
 # Butler binary
 butler_bin := bin_dir / "butler"
-butler_platform := if arch() == "x86" { "linux-386" } else { if arch() == "x86_64" { "linux-amd64" } else{ "" } }
+butler_platform := if arch() == "x86" {
+    "linux-386"
+} else if arch() == "x86_64" {
+    "linux-amd64"
+} else {
+    ""
+}
 
 # === Commands ===
 
@@ -80,9 +81,8 @@ butler_platform := if arch() == "x86" { "linux-386" } else { if arch() == "x86_6
 
 # === Installer ===
 #
-# Recipes that check and/or install some binaries like Godot, Bulter ...
-# This means the user doesn't have to worry about installation,
-# and can be sure that the same code is running in CI and locally.
+# Recipes for checking and/or installing binaries like Godot and Butler.
+# Ensures consistent environments across CI and local development.
 
 # Download Godot
 [private]
@@ -91,7 +91,7 @@ install-godot: makedirs
     unzip -o {{ cache_dir }}/{{ godot_filename }}.zip -d {{ cache_dir }}
     cp {{ cache_dir }}/{{ godot_filename }} {{ godot_bin }}
 
-# Download Godot if not already done
+# Check and download Godot if not already installed
 [private]
 @check-godot:
     [ ! -e {{ godot_bin }} ] && just install-godot || true
@@ -104,7 +104,7 @@ install-templates: makedirs
     mkdir -p {{ godot_templates_dir }}
     cp {{ cache_dir }}/templates/* {{ godot_templates_dir }}
 
-# Download Godot export templates if not already done
+# Check and download Godot export templates if not already installed
 [private]
 @check-templates:
     [ ! -d {{ godot_templates_dir }} ] && just install-templates || true
@@ -117,15 +117,16 @@ install-butler: makedirs
     mv {{ cache_dir }}/butler {{ butler_bin }}
     chmod +x {{ butler_bin }}
 
-# Download Butler if not already done
+# Check and download Butler if not already installed
 [private]
 @check-butler:
     [ ! -e {{ butler_bin }} ] && just install-butler || true
 
 # === Python ===
 #
-# Recipes that use python or python packages.
-# This ensures that all python packages are installed in a virtual environment.
+# Recipes for working with Python and Python packages.
+# These recipes ensure that Python packages are installed within a virtual environment,
+# providing a clean and isolated environment.
 
 export PIP_REQUIRE_VIRTUALENV := "true"
 
@@ -146,8 +147,10 @@ credits:
 
 # === Godot ===
 #
-# Recipes around the Godot binary.
-# This simplifies some recurring tasks, such as installing addons.
+# Recipes for managing the Godot binary.
+# These recipes simplify common tasks such as installing addons, importing game resources,
+# and opening the Godot editor.
+
 
 # Godot binary wrapper
 godot *ARGS: check-godot check-templates
@@ -169,12 +172,18 @@ godot *ARGS: check-godot check-templates
     just godot --editor
 
 # === Butler ===
+#
+# Recipes for managing the Butler binary.
 
 # Bulter wrapper
 butler *ARGS: check-butler
     {{ butler_bin }} {{ ARGS }}
 
 # === Export ===
+#
+# Recipes for exporting the game to different platforms.
+# Handles tasks such as updating version information, preparing directories,
+# and exporting the game for Windows, MacOS, Linux, and the web.
 
 # Updates the game version for export
 @bump-version:
@@ -220,8 +229,7 @@ export: export-windows export-mac export-linux
 
 # === Clean ===
 #
-# Recipes that clean up the project, deleting
-# files and folders created by this Justfile.
+# Recipes for cleaning up the project, removing files and folders created by this Justfile.
 
 # Remove game plugins
 clean-addons:
@@ -241,8 +249,8 @@ clean: clean-addons clean-resources clean-export
 
 # === CI ===
 #
-# Recipes launched by CI steps.
-# They can be run locally, but requires the setup of some environment variables.
+# Recipes triggered by CI steps.
+# Can be run locally but requires setup of environment variables.
 
 # Add some variables to Github env
 ci-load-dotenv:
