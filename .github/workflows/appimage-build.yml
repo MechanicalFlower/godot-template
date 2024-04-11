@@ -1,0 +1,56 @@
+name: AppImage Build
+
+on:
+  workflow_dispatch:
+  # Ensure the build works on main
+  push:
+    branches: [main]
+  # Ensure the build works on each pull request
+  pull_request:
+  # Build and publish on release
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v2
+
+      - name: Load dotenv
+        run: just ci-load-dotenv
+
+      - name: Load dotenv
+        run: just bump-version
+
+      # Install FUSE (https://github.com/AppImage/AppImageKit/wiki/FUSE)
+      - name: Install pkg2image dependencies
+        run: |
+          sudo add-apt-repository universe
+          sudo apt install libfuse2
+
+      # Install pkg2appimage and build the game (https://github.com/AppImageCommunity/pkg2appimage)
+      - name: Build AppImage
+        run: |
+          wget -c $(wget -q https://api.github.com/repos/AppImageCommunity/pkg2appimage/releases -O - | grep "pkg2appimage-.*-x86_64.AppImage" | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
+          chmod +x ./pkg2appimage-*.AppImage
+          ./pkg2appimage-*.AppImage public/packaging/appimage/recipe.yml
+
+      - name: Rename the AppImage
+        run: mv ./out/*.AppImage ${{ env.game_name }}-${{ env.game_version }}.AppImage
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.game_name }}-${{ env.game_version }}.AppImage
+          path: ./
+
+      # Publish, on each release
+      - name: Publish AppImage
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          gh release upload ${{ env.game_version }} ./${{ env.game_name }}-${{ env.game_version }}.AppImage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

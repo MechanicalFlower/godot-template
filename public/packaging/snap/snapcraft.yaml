@@ -1,0 +1,51 @@
+
+---
+name: godot-template
+base: core20
+version: '0.1.0'
+summary: A greeter race minigame
+description: |
+  A greeter race minigame, made with Godot Engine.
+grade: stable
+confinement: strict
+license: MIT
+architectures: [amd64]
+
+apps:
+  greeter:
+    command: Greeter.x86_64 --main-pack $SNAP/Greeter.pck --rendering-driver opengl3
+    extensions: [gnome-3-38]
+    plugs:
+      - pulseaudio
+      - opengl
+      - x11
+    desktop: org.mechanicalflower.Greeter.desktop
+    environment:
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP"
+
+parts:
+  greeter-source:
+    source: https://github.com/MechanicalFlower/godot-template/archive/refs/tags/0.1.0.tar.gz
+    override-build: |
+      snapcraftctl build
+
+      # Icon paths in the desktop file will be rewritten to use ${SNAP}/<file> if specified as desktop file in snapcraft.yaml
+      sed -i.bak -e "s|Icon=org.mechanicalflower.Greeter$|Icon=gui/icon.png|g" ${SNAPCRAFT_PART_SRC}/public/packaging/org.mechanicalflower.Greeter.desktop
+
+      cp ${SNAPCRAFT_PART_SRC}/public/packaging/org.mechanicalflower.Greeter.desktop ${SNAPCRAFT_PART_INSTALL}/org.mechanicalflower.Greeter.desktop
+    plugin: nil
+    override-prime: |
+      snapcraftctl prime
+
+      mkdir -p ${SNAPCRAFT_PRIME}/gui
+      cp ${SNAPCRAFT_PART_SRC}/assets/icon.png ${SNAPCRAFT_PRIME}/gui/icon.png
+  greeter-dist:
+    source: https://github.com/MechanicalFlower/godot-template/releases/download/0.1.0/Greeter-linux-v0.1.0.zip
+    override-build: |
+      snapcraftctl build
+
+      cp ${SNAPCRAFT_PART_SRC}/Greeter.x86_64 ${SNAPCRAFT_PART_INSTALL}/Greeter.x86_64
+      cp ${SNAPCRAFT_PART_SRC}/Greeter.pck ${SNAPCRAFT_PART_INSTALL}/Greeter.pck
+
+      chmod +x ${SNAPCRAFT_PART_INSTALL}/Greeter.x86_64
+    plugin: nil

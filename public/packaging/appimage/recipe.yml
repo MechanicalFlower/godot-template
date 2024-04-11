@@ -1,0 +1,46 @@
+app: Greeter
+
+ingredients:
+  dist: trusty
+  sources:
+    - deb http://us.archive.ubuntu.com/ubuntu/ trusty main universe
+  packages:
+    - libx11-6
+    - libxinerama1
+    - libxcursor1
+    - libxrandr2
+    - libfreetype6
+    - libpng12-0
+    - libasound2
+    - libpulse0
+    - libgl1-mesa-glx
+    - zlib1g
+    - libgcc1
+    - libc6
+  script:
+    # Download released builds
+    - wget -c "https://github.com/MechanicalFlower/godot-template/releases/download/0.1.0/Greeter-linux-v0.1.0.zip"
+    - unzip *.zip
+    # Download the icon and the .desktop file
+    - wget -c "https://raw.githubusercontent.com/MechanicalFlower/godot-template/0.1.0/public/packaging/org.mechanicalflower.Greeter.desktop"
+    - wget -c "https://raw.githubusercontent.com/MechanicalFlower/godot-template/0.1.0/assets/icon.png"
+
+script:
+  - sed -i.bak -e "s,Version=.*$,,g" ../org.mechanicalflower.Greeter.desktop
+  # Replace the icon path in the desktop file
+  - sed -i.bak -e "s,Icon=org.mechanicalflower.Greeter$,Icon=/usr/share/icons/hicolor/apps/Greeter.png,g" ../org.mechanicalflower.Greeter.desktop
+  # Replace the exec command in the desktop file
+  - sed -i.bak -e "s,Exec=Greeter-wrapper$,Exec=bin/Greeter.x86_64 --main-pack bin/Greeter.pck --rendering-driver opengl3,g" ../org.mechanicalflower.Greeter.desktop
+  # Copy the desktop file
+  - mkdir -p usr/share/applications/
+  - cp ../org.mechanicalflower.Greeter.desktop .
+  - cp ../org.mechanicalflower.Greeter.desktop usr/share/applications/org.mechanicalflower.Greeter.desktop
+  # Copy the icon
+  - mkdir -p usr/share/icons/hicolor/apps/
+  - cp ../icon.png usr/share/icons/hicolor/apps/Greeter.png
+  # Copy game files
+  - mkdir -p usr/bin/
+  - cp ../Greeter.x86_64 usr/bin/Greeter.x86_64
+  - cp ../Greeter.pck usr/bin/Greeter.pck
+  # Ensure the game is an executable
+  - chmod +x usr/bin/Greeter.x86_64
