@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - .github/renovate.json
+      - .github/workflows/renovate.yml
 
 jobs:
   renovate-local:
