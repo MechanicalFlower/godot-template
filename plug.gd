@@ -12,7 +12,7 @@ func _plugging():
 	)
 	plug(
 		"nisovin/godot-coi-serviceworker",
-		{"commit": "de1be2989eda4c7d77a08b8c56cd94c769181c4e", "renovate-branch": "main"}
+		{"commit": "4eaff9386ac7d0cd93bedba47143728b18b97371", "renovate-branch": "main"}
 	)
 
 	# Patched version
