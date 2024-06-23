@@ -47,6 +47,7 @@ Download the zip archive, accordingly to your OS, and unzip it.
 - **MacOS**: Double click on `Greeter.app`.
 - **Linux**: In a terminal, run `./Greeter.x86_64`.
 
+<!--
 ### From Snap
 
 With the [Snap command line](https://manpages.ubuntu.com/manpages/focal/en/man8/snap.8.html), run:
@@ -58,7 +59,9 @@ To run the game:
 ```
 godot-template.greeter
 ```
+-->
 
+<!--
 ### From an AppImage
 
 The AppImage is available on the Github
@@ -66,6 +69,7 @@ The AppImage is available on the Github
 
 More details on how to run an AppImage, on the
  [official documentation](https://docs.appimage.org/introduction/quickstart.html#how-to-run-an-appimage).
+-->
 
 ### From source
 
