@@ -1,3 +1,9 @@
+ci:
+  autofix_prs: false
+  autoupdate_commit_msg: 'chore(deps): Bump pre-commit hooks'
+  autoupdate_schedule: weekly
+  skip: [format-shaders]
+
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.4.0
