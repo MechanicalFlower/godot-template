@@ -4,7 +4,7 @@ extends "res://addons/gd-plug/plug.gd"
 func _plugging():
 	plug(
 		"godot-extended-libraries/godot-debug-menu",
-		{"commit": "0474847f9cca416a339a1d6aae4791d7fba26204", "renovate-branch": "master"}
+		{"commit": "f8d1202df122f7e8227ec3a7bdcff745e9780d52", "renovate-branch": "master"}
 	)
 	plug(
 		"KoBeWi/Godot-Universal-Fade",
