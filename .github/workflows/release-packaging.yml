@@ -9,7 +9,7 @@ env:
 
 jobs:
   check:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
 
     steps:
@@ -28,7 +28,7 @@ jobs:
           [ "${{ env.game_version }}" == "${{ env.BRANCH_NAME }}" ] || exit 2
 
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     needs: [check]
 
@@ -58,7 +58,7 @@ jobs:
           retention-days: 1
 
   deploy:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     needs: [check]
 
@@ -95,7 +95,7 @@ jobs:
           folder: build/web
 
   publish:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     needs: [build]
 
