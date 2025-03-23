@@ -18,5 +18,5 @@ func _plugging():
 	)
 	plug(
 		"florianvazelle/Log",
-		{"commit": "51878aa55c4169f19b2c000f0e53b77439654829", "renovate-branch": "main"}
+		{"commit": "f23215571cb398c16272227130885d867d12cb4b", "renovate-branch": "main"}
 	)
