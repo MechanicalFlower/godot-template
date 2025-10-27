@@ -6,7 +6,7 @@ ci:
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v6.0.0
   hooks:
   - id: check-added-large-files # Prevent giant files from being committed
     args: ['--maxkb=1500']
@@ -22,7 +22,7 @@ repos:
   - id: mixed-line-ending       # Consistent LF or CRLF
   - id: trailing-whitespace     # No trailing whitespace
 - repo: https://github.com/fsfe/reuse-tool
-  rev: v5.0.2
+  rev: v6.2.0
   hooks:
   - id: reuse
 - repo: https://github.com/codespell-project/codespell
@@ -30,7 +30,7 @@ repos:
   hooks:
   - id: codespell
 - repo: https://github.com/Scony/godot-gdscript-toolkit
-  rev: 4.3.4
+  rev: 4.5.0
   hooks:
   - id: gdformat
     exclude: '^addons/gd-plug/'
