@@ -42,7 +42,7 @@ jobs:
       - name: Rename the AppImage
         run: mv ./out/*.AppImage ${{ env.game_name }}-${{ env.game_version }}.AppImage
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: ${{ env.game_name }}-${{ env.game_version }}.AppImage
           path: ./
