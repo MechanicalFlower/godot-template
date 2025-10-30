@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: extractions/setup-just@v3
 
       - name: Load dotenv
@@ -33,7 +33,7 @@ jobs:
     needs: [check]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: extractions/setup-just@v3
 
       - name: Load dotenv
@@ -65,7 +65,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: extractions/setup-just@v3
 
       - name: Load dotenv
@@ -102,7 +102,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: extractions/setup-just@v3
 
       - name: Load dotenv
