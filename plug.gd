@@ -8,7 +8,7 @@ func _plugging():
 	)
 	plug(
 		"KoBeWi/Godot-Universal-Fade",
-		{"commit": "f091514bba652880f81c5bc8809e0ee4498988ea", "renovate-branch": "master"}
+		{"commit": "d3e288d6d9dab100113d671c4d3abb4cf4ac271a", "renovate-branch": "master"}
 	)
 
 	# Patched version
